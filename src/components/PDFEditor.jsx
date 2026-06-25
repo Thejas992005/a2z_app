@@ -104,7 +104,7 @@ const SignaturePad = ({ onSave, onCancel }) => {
   );
 };
 
-const PageThumbnail = ({ fileBytes, pageNum, isBlank }) => {
+const PageThumbnail = React.memo(({ fileBytes, pageNum, isBlank }) => {
   const canvasRef = useRef(null);
   const [loading, setLoading] = useState(true);
 
@@ -153,7 +153,9 @@ const PageThumbnail = ({ fileBytes, pageNum, isBlank }) => {
       />
     </div>
   );
-};
+});
+
+PageThumbnail.displayName = 'PageThumbnail';
 
 export const PDFEditor = ({ onBack }) => {
   const [file, setFile] = useState(null);

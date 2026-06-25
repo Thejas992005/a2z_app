@@ -340,6 +340,19 @@ export const organizePDF = async (file, pageIndicesOrder) => {
   return await organizedPdf.save();
 };
 
+// Cache for loaded PDFJS Document promises, keyed by the source file bytes object
+const pdfDocumentCache = new WeakMap();
+
+const getCachedPDFDocument = (fileBytes) => {
+  let pdfPromise = pdfDocumentCache.get(fileBytes);
+  if (!pdfPromise) {
+    const bytesCopy = fileBytes.slice(0);
+    pdfPromise = pdfjsLib.getDocument({ data: bytesCopy }).promise;
+    pdfDocumentCache.set(fileBytes, pdfPromise);
+  }
+  return pdfPromise;
+};
+
 /**
  * Extract all PDF pages as JPG images (rendered client-side)
  * @param {Uint8Array} fileBytes
@@ -347,9 +360,7 @@ export const organizePDF = async (file, pageIndicesOrder) => {
  * @returns {Promise<Array<{ name: string, dataUrl: string }>>}
  */
 export const convertPDFToImages = async (fileBytes, onProgress) => {
-  const bytesCopy = fileBytes.slice(0);
-  const loadingTask = pdfjsLib.getDocument({ data: bytesCopy });
-  const pdf = await loadingTask.promise;
+  const pdf = await getCachedPDFDocument(fileBytes);
   const totalPages = pdf.numPages;
   const images = [];
   
@@ -390,9 +401,7 @@ export const convertPDFToImages = async (fileBytes, onProgress) => {
  * @returns {Promise<void>}
  */
 export const renderPageToCanvas = async (fileBytes, pageNum, canvas, scale = 0.5) => {
-  const bytesCopy = fileBytes.slice(0);
-  const loadingTask = pdfjsLib.getDocument({ data: bytesCopy });
-  const pdf = await loadingTask.promise;
+  const pdf = await getCachedPDFDocument(fileBytes);
   const page = await pdf.getPage(pageNum);
   const viewport = page.getViewport({ scale });
   
@@ -412,8 +421,6 @@ export const renderPageToCanvas = async (fileBytes, pageNum, canvas, scale = 0.5
  * @returns {Promise<number>}
  */
 export const getPDFPageCount = async (fileBytes) => {
-  const bytesCopy = fileBytes.slice(0);
-  const loadingTask = pdfjsLib.getDocument({ data: bytesCopy });
-  const pdf = await loadingTask.promise;
+  const pdf = await getCachedPDFDocument(fileBytes);
   return pdf.numPages;
 };
