@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { 
   Merge, 
   Scissors, 
@@ -10,7 +10,6 @@ import {
   FileImage, 
   Image, 
   Layers, 
-  Search,
   Edit
 } from 'lucide-react';
 
@@ -105,23 +104,11 @@ const TOOLS = [
   }
 ];
 
-const CATEGORIES = [
-  { id: 'all', label: 'All Tools' },
-  { id: 'organize', label: 'Organize' },
-  { id: 'convert', label: 'Convert' },
-  { id: 'edit', label: 'Edit' },
-  { id: 'security', label: 'Security' }
-];
-
-export const Dashboard = ({ onSelectTool }) => {
-  const [search, setSearch] = useState('');
-  const [activeCategory, setActiveCategory] = useState('all');
-
+export const Dashboard = ({ onSelectTool, search = '' }) => {
   const filteredTools = TOOLS.filter((tool) => {
     const matchesSearch = tool.title.toLowerCase().includes(search.toLowerCase()) || 
                           tool.desc.toLowerCase().includes(search.toLowerCase());
-    const matchesCategory = activeCategory === 'all' || tool.category === activeCategory;
-    return matchesSearch && matchesCategory;
+    return matchesSearch;
   });
 
   return (
@@ -133,51 +120,6 @@ export const Dashboard = ({ onSelectTool }) => {
         <p className="hero-subtitle">
           Free, fast, and 100% private. All PDF files are processed client-side in your browser. Your files never leave your device.
         </p>
-
-        {/* Search Bar */}
-        <div style={{
-          position: 'relative',
-          maxWidth: '500px',
-          margin: '0 auto 2.5rem',
-        }}>
-          <input
-            type="text"
-            placeholder="Search for tools... (e.g. merge, encrypt)"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="form-input"
-            style={{
-              paddingLeft: '2.75rem',
-              borderRadius: '9999px',
-              fontSize: '1rem',
-              height: '48px',
-              background: 'rgba(255,255,255,0.02)',
-              border: '1px solid rgba(255,255,255,0.1)'
-            }}
-          />
-          <Search style={{
-            position: 'absolute',
-            left: '1rem',
-            top: '50%',
-            transform: 'translateY(-50%)',
-            color: 'var(--text-muted)',
-            width: '1.25rem',
-            height: '1.25rem'
-          }} />
-        </div>
-
-        {/* Categories Navigation */}
-        <div className="categories-tabs">
-          {CATEGORIES.map((cat) => (
-            <button
-              key={cat.id}
-              onClick={() => setActiveCategory(cat.id)}
-              className={`category-tab ${activeCategory === cat.id ? 'active' : ''}`}
-            >
-              {cat.label}
-            </button>
-          ))}
-        </div>
       </header>
 
       {/* Tools Grid */}
@@ -206,13 +148,6 @@ export const Dashboard = ({ onSelectTool }) => {
       {filteredTools.length === 0 && (
         <div style={{ textAlign: 'center', padding: '3rem 0', color: 'var(--text-secondary)' }}>
           <p style={{ fontSize: '1.1rem' }}>No tools matched your search criteria.</p>
-          <button 
-            onClick={() => { setSearch(''); setActiveCategory('all'); }} 
-            className="btn btn-secondary" 
-            style={{ marginTop: '1rem' }}
-          >
-            Reset Filters
-          </button>
         </div>
       )}
     </div>

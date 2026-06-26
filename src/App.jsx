@@ -3,11 +3,11 @@ import Navbar from './components/Navbar';
 import Dashboard from './components/Dashboard';
 import ToolWorkspace from './components/ToolWorkspace';
 import PDFEditor from './components/PDFEditor';
-import AdPlaceholder from './components/AdPlaceholder';
 import './App.css';
 
 function App() {
   const [currentTool, setCurrentTool] = useState('home');
+  const [search, setSearch] = useState('');
 
   const handleSelectTool = (toolId) => {
     setCurrentTool(toolId);
@@ -22,20 +22,12 @@ function App() {
   return (
     <>
       {/* Navigation Header */}
-      <Navbar currentView={currentTool} onGoHome={handleGoHome} />
+      <Navbar currentView={currentTool} onGoHome={handleGoHome} search={search} onSearchChange={setSearch} />
 
       {/* Main Workspace Section */}
       <main style={{ flex: 1, display: 'flex', flexDirection: 'column', padding: '1.5rem 0' }}>
         {currentTool === 'home' ? (
-          <>
-            {/* Top Leaderboard Ad Slot */}
-            <div className="container">
-              <AdPlaceholder type="leaderboard" />
-            </div>
-            
-            {/* Dashboard UI */}
-            <Dashboard onSelectTool={handleSelectTool} />
-          </>
+            <Dashboard onSelectTool={handleSelectTool} search={search} />
         ) : currentTool === 'edit' ? (
           /* Advanced Editor Interface */
           <PDFEditor onBack={handleGoHome} />

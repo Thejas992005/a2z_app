@@ -1,5 +1,5 @@
-import React from 'react';
-import { FileText } from 'lucide-react';
+import React, { useState, useRef, useEffect } from 'react';
+import { FileText, Search, X } from 'lucide-react';
 
 const GithubIcon = ({ size = 16, className = '', style = {} }) => (
   <svg
@@ -19,7 +19,31 @@ const GithubIcon = ({ size = 16, className = '', style = {} }) => (
   </svg>
 );
 
-export const Navbar = ({ currentView, onGoHome }) => {
+export const Navbar = ({ currentView, onGoHome, search = '', onSearchChange }) => {
+  const [searchOpen, setSearchOpen] = useState(false);
+  const inputRef = useRef(null);
+
+  useEffect(() => {
+    if (searchOpen && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [searchOpen]);
+
+  const handleToggleSearch = () => {
+    if (searchOpen) {
+      onSearchChange('');
+      setSearchOpen(false);
+    } else {
+      setSearchOpen(true);
+    }
+  };
+
+  const handleBlur = () => {
+    if (!search) {
+      setSearchOpen(false);
+    }
+  };
+
   return (
     <nav className="navbar">
       <div className="container navbar-container">
@@ -29,6 +53,29 @@ export const Navbar = ({ currentView, onGoHome }) => {
         </a>
         
         <div className="nav-links">
+          {/* Collapsible Search */}
+          <div className="nav-search-wrapper">
+            {searchOpen && (
+              <input
+                ref={inputRef}
+                type="text"
+                placeholder="Search tools…"
+                value={search}
+                onChange={(e) => onSearchChange(e.target.value)}
+                onBlur={handleBlur}
+                className="nav-search-input"
+              />
+            )}
+            <button
+              className="nav-search-btn"
+              onClick={handleToggleSearch}
+              aria-label={searchOpen ? 'Close search' : 'Open search'}
+              title="Search tools"
+            >
+              {searchOpen ? <X size={18} /> : <Search size={18} />}
+            </button>
+          </div>
+
           <a href="#" className={`nav-link ${currentView === 'home' ? 'active' : ''}`} onClick={(e) => { e.preventDefault(); onGoHome(); }}>
             Tools
           </a>

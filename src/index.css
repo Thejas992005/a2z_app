@@ -135,6 +135,7 @@ a:hover {
 
 .nav-links {
   display: flex;
+  align-items: center;
   gap: 1.5rem;
 }
 
@@ -145,6 +146,71 @@ a:hover {
 }
 .nav-link:hover, .nav-link.active {
   color: var(--text-primary);
+}
+
+/* Navbar Search */
+.nav-search-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  position: relative;
+}
+
+.nav-search-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  flex-shrink: 0;
+}
+
+.nav-search-btn:hover {
+  background: rgba(99, 102, 241, 0.15);
+  border-color: rgba(99, 102, 241, 0.4);
+  color: var(--text-primary);
+}
+
+.nav-search-input {
+  width: 200px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  border-radius: 10px;
+  padding: 0.45rem 0.85rem;
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  transition: all 0.25s ease;
+  animation: searchSlideIn 0.25s ease forwards;
+}
+
+.nav-search-input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+}
+
+.nav-search-input::placeholder {
+  color: var(--text-muted);
+}
+
+@keyframes searchSlideIn {
+  from {
+    width: 0;
+    opacity: 0;
+    padding: 0.45rem 0;
+  }
+  to {
+    width: 200px;
+    opacity: 1;
+    padding: 0.45rem 0.85rem;
+  }
 }
 
 /* Ad Placeholders */
@@ -193,13 +259,13 @@ a:hover {
 /* Dashboard / Grid Home */
 .hero-section {
   text-align: center;
-  padding: 3rem 0 2rem;
+  padding: 2rem 0 1.25rem;
 }
 
 .hero-title {
   font-size: 3rem;
   line-height: 1.15;
-  margin-bottom: 1rem;
+  margin-bottom: 0.75rem;
   letter-spacing: -0.03em;
 }
 
@@ -213,33 +279,10 @@ a:hover {
   color: var(--text-secondary);
   font-size: 1.2rem;
   max-width: 600px;
-  margin: 0 auto 2rem;
+  margin: 0 auto 1rem;
 }
 
-.categories-tabs {
-  display: flex;
-  justify-content: center;
-  gap: 0.5rem;
-  margin-bottom: 2rem;
-}
-
-.category-tab {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid var(--border-subtle);
-  color: var(--text-secondary);
-  padding: 0.5rem 1.25rem;
-  border-radius: 9999px;
-  cursor: pointer;
-  font-weight: 500;
-  font-size: 0.9rem;
-  transition: all 0.2s ease;
-}
-
-.category-tab:hover, .category-tab.active {
-  background: rgba(99, 102, 241, 0.15);
-  border-color: rgba(99, 102, 241, 0.4);
-  color: var(--text-primary);
-}
+/* (category tabs removed) */
 
 .tools-grid {
   display: grid;
