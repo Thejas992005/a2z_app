@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { FileText, Search, X } from 'lucide-react';
+import { FileText, Search, X, Sun, Moon } from 'lucide-react';
 
 const GithubIcon = ({ size = 16, className = '', style = {} }) => (
   <svg
@@ -19,7 +19,7 @@ const GithubIcon = ({ size = 16, className = '', style = {} }) => (
   </svg>
 );
 
-export const Navbar = ({ currentView, onGoHome, search = '', onSearchChange }) => {
+export const Navbar = ({ currentView, onGoHome, search = '', onSearchChange, theme = 'dark', onToggleTheme }) => {
   const [searchOpen, setSearchOpen] = useState(false);
   const inputRef = useRef(null);
 
@@ -89,6 +89,16 @@ export const Navbar = ({ currentView, onGoHome, search = '', onSearchChange }) =
             <GithubIcon size={16} />
             <span>GitHub</span>
           </a>
+
+          {/* Theme Toggle */}
+          <button
+            className="theme-toggle-btn"
+            onClick={onToggleTheme}
+            aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+            title={theme === 'dark' ? 'Light mode' : 'Dark mode'}
+          >
+            {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+          </button>
         </div>
       </div>
     </nav>

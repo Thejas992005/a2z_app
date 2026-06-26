@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from './components/Navbar';
 import Dashboard from './components/Dashboard';
 import ToolWorkspace from './components/ToolWorkspace';
@@ -8,6 +8,16 @@ import './App.css';
 function App() {
   const [currentTool, setCurrentTool] = useState('home');
   const [search, setSearch] = useState('');
+  const [theme, setTheme] = useState(() => localStorage.getItem('pdfcraft-theme') || 'dark');
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('pdfcraft-theme', theme);
+  }, [theme]);
+
+  const handleToggleTheme = () => {
+    setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
+  };
 
   const handleSelectTool = (toolId) => {
     setCurrentTool(toolId);
@@ -22,7 +32,7 @@ function App() {
   return (
     <>
       {/* Navigation Header */}
-      <Navbar currentView={currentTool} onGoHome={handleGoHome} search={search} onSearchChange={setSearch} />
+      <Navbar currentView={currentTool} onGoHome={handleGoHome} search={search} onSearchChange={setSearch} theme={theme} onToggleTheme={handleToggleTheme} />
 
       {/* Main Workspace Section */}
       <main style={{ flex: 1, display: 'flex', flexDirection: 'column', padding: '1.5rem 0' }}>
